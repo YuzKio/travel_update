@@ -78,8 +78,10 @@ export default {
     })
   },
   mounted () {
-    // 创建一个实例属性
-    this.scroll = new Bscroll(this.$refs.wrapper)
+    // 创建一个实例属性，直接创建，但是如果希望我们创建的实例上面的东西可以被点击，光这么写还不行，还要加click
+    this.scroll = new Bscroll(this.$refs.wrapper, {
+      click: true
+    })
   },
   watch: {
     letter () {
