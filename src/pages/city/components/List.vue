@@ -6,7 +6,8 @@
         <div class="button-list">
           <div class="button-wrapper">
             <div class="button">
-              北京
+<!--              {{ this.$store.state.city }}-->
+              {{ this.currentyCity }}
             </div>
           </div>
         </div>
@@ -18,6 +19,7 @@
             class="button-wrapper"
             v-for="item of hot"
             :key="item.id"
+            @click="handleCityClick(item.name)"
           >
             <div class="button">
               {{ item.name }}
@@ -34,7 +36,12 @@
       >
         <div class="title border-topbottom">{{ key }}</div>
         <div class="item-list">
-          <div class="item border-bottom" v-for="innerItem of item" :key="innerItem.id">
+          <div
+            class="item border-bottom"
+            v-for="innerItem of item"
+            :key="innerItem.id"
+            @click="handleCityClick(innerItem.name)"
+          >
             {{ innerItem.name }}
           </div>
         </div>
@@ -45,12 +52,30 @@
 
 <script>
 import Bscroll from 'better-scroll'
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: "CityList",
   props: {
     hot: Array,
     cities: Object,
     letter: String
+  },
+  methods: {
+    handleCityClick (city) {
+      // this.$store.dispatch('changeCity', city) 因为没有异步操作，所以可以直接用commit
+      // this.$store.commit('changeCity', city) 靠mutation简化
+      this.changeCity((city))
+      this.$router.push('/')
+    },
+    // 有一个mutations叫changeCity，把这个mutation映射到组件中名字叫changeCity的方法里，
+    ...mapMutations(['changeCity'])
+  },
+  computed: {
+    // 传递的可以是个数组也可以是个对象
+    ...mapState({
+      // 把vuex里city这个共用的数据映射到组件的计算属性里，名字是currentCity
+      currentyCity: 'city'
+    })
   },
   mounted () {
     // 创建一个实例属性
