@@ -14,7 +14,11 @@
       <div class="area">
         <div class="title border-topbottom">热门城市</div>
         <div class="button-list">
-          <div class="button-wrapper" v-for="item of hot" :key="item.id">
+          <div
+            class="button-wrapper"
+            v-for="item of hot"
+            :key="item.id"
+          >
             <div class="button">
               {{ item.name }}
             </div>
@@ -22,7 +26,12 @@
         </div>
       </div>
 <!--      对象也可以被v-for循环，循环的时候第二项不是index，是key。双层循环时，如果父级的key值和子级的key重复，是没关系的，只要同级不重复就行-->
-      <div class="area" v-for="(item, key) of cities" :key="key">
+      <div
+        class="area"
+        v-for="(item, key) of cities"
+        :key="key"
+        :ref="key"
+      >
         <div class="title border-topbottom">{{ key }}</div>
         <div class="item-list">
           <div class="item border-bottom" v-for="innerItem of item" :key="innerItem.id">
@@ -40,11 +49,25 @@ export default {
   name: "CityList",
   props: {
     hot: Array,
-    cities: Object
+    cities: Object,
+    letter: String
   },
-  mounted() {
+  mounted () {
     // 创建一个实例属性
     this.scroll = new Bscroll(this.$refs.wrapper)
+  },
+  watch: {
+    letter () {
+      if (this.letter) {
+        // 使他可以自动滚动到某个元素上，上面定义了ref
+        // 通过this.$refs现在这个字母对应的area
+        // 使用循环输出的ref得到的是一个数组，而不是一个标准的DOM元素
+        // 但是这个方法接受的是DOM元素，或者是DOM的选择器
+        // const element = this.$refs[this.letter] 所以单纯这么写是不对的
+        const element = this.$refs[this.letter][0]
+        this.scroll.scrollToElement(element)
+      }
+    }
   }
 }
 </script>
