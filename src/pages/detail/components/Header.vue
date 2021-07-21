@@ -29,7 +29,9 @@ export default {
   },
   methods: {
     handleScroll () {
-      const top = document.documentElement.scrollTop
+      // 有些浏览器不兼容下面的代码，会出现白屏
+      // const top = document.documentElement.scrollTop
+      const top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
       if (top > 60) {
         let opacity = top / 140
         opacity = opacity > 1 ? 1 : opacity
@@ -42,14 +44,22 @@ export default {
       }
     }
   },
-  // 页面一被展示，activated的代码就会执行
-  activated () {
-    // 如果在这个局部组件中对window这个全局对象进行绑定，在其他组件中也会触发事件
+  // // 页面一被展示，activated的代码就会执行，只有在keep-alive管辖范围内的组件才有这个钩子函数
+  // activated () {
+  //   // 如果在这个局部组件中对window这个全局对象进行绑定，在其他组件中也会触发事件
+  //   // 但是我们把Detail从keep-alive中exclude了之后，就无法使用这个钩子了，所以效果也不会被触发，这点要注意，所以把activated改为mounted
+  //   window.addEventListener('scroll', this.handleScroll)
+  // },
+  // // 页面即将隐藏，或页面即将被替换为新的页面时，这个组件的这个钩子会被执行
+  // deactivated () {
+  //   // 页面展示的时候，绑定scroll事件，页面隐藏时，对这个全局事件解绑
+  //   window.removeEventListener('scroll', this.handleScroll)
+  // }
+  // 页面一被展示，activated的代码就会执行，只有在keep-alive管辖范围内的组件才有这个钩子函数
+  mounted () {
     window.addEventListener('scroll', this.handleScroll)
   },
-  // 页面即将隐藏，或页面即将被替换为新的页面时，这个组件的这个钩子会被执行
-  deactivated () {
-    // 页面展示的时候，绑定scroll事件，页面隐藏时，对这个全局事件解绑
+  destroyed () {
     window.removeEventListener('scroll', this.handleScroll)
   }
 }
