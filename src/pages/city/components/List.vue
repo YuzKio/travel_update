@@ -7,7 +7,7 @@
           <div class="button-wrapper">
             <div class="button">
 <!--              {{ this.$store.state.city }}-->
-              {{ this.currentyCity }}
+              {{ this.currentCity }}
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default {
     // 传递的可以是个数组也可以是个对象
     ...mapState({
       // 把vuex里city这个共用的数据映射到组件的计算属性里，名字是currentCity
-      currentyCity: 'city'
+      currentCity: 'city'
     })
   },
   mounted () {
